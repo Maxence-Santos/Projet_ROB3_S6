@@ -1,0 +1,52 @@
+[
+  {
+    "Sourcefile": null,
+    "Include": "",
+    "Includepath": "/home/matteo/.arduino15/packages/arduino/hardware/avr/1.8.6/cores/arduino"
+  },
+  {
+    "Sourcefile": null,
+    "Include": "",
+    "Includepath": "/home/matteo/.arduino15/packages/arduino/hardware/avr/1.8.6/variants/standard"
+  },
+  {
+    "Sourcefile": "/home/matteo/arduino/Projet_ROB3_S6/test_moteurs/build/sketch/test_moteurs.ino.cpp",
+    "Include": "can-serial.h",
+    "Includepath": "/home/matteo/Documents/Arduino/libraries/CAN_BUS_Shield/src"
+  },
+  {
+    "Sourcefile": "/home/matteo/arduino/Projet_ROB3_S6/test_moteurs/build/sketch/test_moteurs.ino.cpp",
+    "Include": "SPI.h",
+    "Includepath": "/home/matteo/.arduino15/packages/arduino/hardware/avr/1.8.6/libraries/SPI/src"
+  },
+  {
+    "Sourcefile": "/home/matteo/arduino/Projet_ROB3_S6/test_moteurs/build/sketch/test_moteurs.ino.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "/home/matteo/Documents/Arduino/libraries/CAN_BUS_Shield/src/can-serial.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "/home/matteo/Documents/Arduino/libraries/CAN_BUS_Shield/src/mcp2515_can.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "/home/matteo/Documents/Arduino/libraries/CAN_BUS_Shield/src/mcp2518fd_can.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "/home/matteo/Documents/Arduino/libraries/CAN_BUS_Shield/src/mcp_can.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "/home/matteo/.arduino15/packages/arduino/hardware/avr/1.8.6/libraries/SPI/src/SPI.cpp",
+    "Include": "",
+    "Includepath": null
+  }
+]
