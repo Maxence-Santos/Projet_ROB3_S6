@@ -1,6 +1,7 @@
 #include "HCSR04.h"
 #include "Servo.h"
 #include "Calibration.h"
+#include "bouton_poussoir.h"
 
 void setup() {
   // put your setup code here, to run once:
@@ -9,6 +10,7 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
+  bouton();
   calibration();
-  
+  recherche_balise();
 }
