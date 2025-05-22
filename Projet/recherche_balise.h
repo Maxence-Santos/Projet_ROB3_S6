@@ -1,3 +1,1 @@
 void start();
-
-void avance();

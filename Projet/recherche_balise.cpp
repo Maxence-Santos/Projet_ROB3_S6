@@ -32,6 +32,16 @@ mcp2515_can CAN(SPI_CS_PIN);  // Set CS pin
 #define MOTOR_MAX_POS_DEG 120.0
 #define MOTOR_MIN_POS_DEG -120.0
 
+#define Broche_Echo_1 5 // Broche Echo du HC-SR04 sur D7 // 
+#define Broche_Trigger_1 4 // Broche Trigger du HC-SR04 sur D8 //
+ 
+ // Definition des variables  
+int MesureMaxi = 4000; 
+// Distance maxi a mesurer // 
+int MesureMini = 30; 
+// Distance mini a mesurer //  
+long Duree; 
+long Distance;
 /******************  GLOBAL VARIABLES *********************/
 // Global motor state variables
 double currentMotorPosDeg[3] = {0,0,0};
@@ -173,6 +183,8 @@ void start() {
   // Initialization of the analog input pins
   pinMode(analogPinP0, INPUT);
   pinMode(analogPinP1, INPUT);
+  pinMode(Broche_Trigger_1, OUTPUT); // Broche Trigger en sortie // 
+  pinMode(Broche_Echo_1, INPUT); // Broche Echo en entree // 
   currentP0Rawvalue = analogRead(analogPinP0);
   currentP1Rawvalue = analogRead(analogPinP1);
 
@@ -234,7 +246,7 @@ void start() {
   printingPeriodicity = 10;
 }
 
-void avance() {
+void avance_normal() {
   // put your main code here, to run repeatedly:
   unsigned int sleep_time;
  
@@ -247,6 +259,86 @@ void avance() {
   }
 }
 
-void balise() {
+void avance_ralenti() {
+  // put your main code here, to run repeatedly:
+  unsigned int sleep_time;
+ 
+  sendVelocityCommand(2000,3);
+  sendVelocityCommand(-2000,2);
 
+  sleep_time = PERIOD_IN_MICROS-((micros()-current_time));
+  if ( (sleep_time >0) && (sleep_time < PERIOD_IN_MICROS) ) {
+    delayMicroseconds(sleep_time);
+  }
+}
+
+void balise() {
+  int mes_prec = mesure_ref();
+  int mes = mesure();
+  avance_normal();
+
+  if ((mes_prec - mes >= 1.5) || (mes_prec - mes <= 2)) {
+    avance_ralenti();
+  }
+
+  if ((mes_prec - mes >= 2.9) || (mes_prec - mes <= 3.1)) {
+    stocker_pos();
+  }
+
+  mes_prec = mes;
+}
+
+void stocker_pos() {
+
+}
+
+int mesure() {
+  // Debut de la mesure avec un signal de 10 µS applique sur TRIG // 
+  digitalWrite(Broche_Trigger_1, LOW); 
+  // On efface l'etat logique de TRIG // 
+  delayMicroseconds(2);   
+  digitalWrite(Broche_Trigger_1, HIGH); // On met la broche TRIG a "1" pendant 10µS //
+  delayMicroseconds(10); 
+  digitalWrite(Broche_Trigger_1, LOW); // On remet la broche TRIG a "0" //  
+  // On mesure combien de temps le niveau logique haut est actif sur ECHO // 
+  Duree = pulseIn(Broche_Echo_1, HIGH);  
+  // Calcul de la distance grace au temps mesure // 
+  Distance_1 = 10*Duree*0.034/2;
+  // Verification si valeur mesuree dans la plage // 
+  if (Distance_1 >= MesureMaxi || Distance_1 <= MesureMini) {     
+    Serial.println("Distance de mesure en dehors de la plage (30 mm à 3 m)"); 
+  }  
+  else {      
+    // Affichage dans le moniteur serie de la distance mesuree //  
+    Serial.print("Distance mesuree 1 :");  
+    Serial.print(Distance_1);  
+    Serial.println("mm"); 
+  }
+  return Distance_1;
+}
+
+int mesure_ref() {
+  int mes_prec;
+  // Debut de la mesure avec un signal de 10 µS applique sur TRIG // 
+  digitalWrite(Broche_Trigger_1, LOW); 
+  // On efface l'etat logique de TRIG // 
+  delayMicroseconds(2);   
+  digitalWrite(Broche_Trigger_1, HIGH); // On met la broche TRIG a "1" pendant 10µS //
+  delayMicroseconds(10); 
+  digitalWrite(Broche_Trigger_1, LOW); // On remet la broche TRIG a "0" //  
+  // On mesure combien de temps le niveau logique haut est actif sur ECHO // 
+  Duree = pulseIn(Broche_Echo_1, HIGH);  
+  // Calcul de la distance grace au temps mesure // 
+  Distance_1 = 10*Duree*0.034/2;
+  // Verification si valeur mesuree dans la plage // 
+  if (Distance_1 >= MesureMaxi || Distance_1 <= MesureMini) {     
+    Serial.println("Distance de mesure en dehors de la plage (30 mm à 3 m)"); 
+  }  
+  else {      
+    // Affichage dans le moniteur serie de la distance mesuree //  
+    Serial.print("Distance mesuree 1 :");  
+    Serial.print(Distance_1);  
+    Serial.println("mm"); 
+  }
+  return Distance_1;
 }

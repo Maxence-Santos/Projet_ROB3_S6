@@ -12,7 +12,7 @@ Ultrasonic ultra_2(TRIG_PIN_C,ECHO_PIN_C);
 
 void setup() {
   // put your setup code here, to run once:
-  Serial.begin(9600);
+  Serial.begin(115200);
  // HCSR04.begin(TRIG_PIN_D,ECHO_PIN_D);
   //HCSR04.begin(TRIG_PIN_C,ECHO_PIN_C);
 }
