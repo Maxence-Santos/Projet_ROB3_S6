@@ -19,6 +19,7 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
   bouton_poussoir();
+  start();
   calibration();
   recherche_balise();
 }
