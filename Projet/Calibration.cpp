@@ -3,13 +3,14 @@
 #include "Calibration.h"
 #include "HCSR04.h"
 #include "moteur.h"
-
-//#include <Arduino.h>
+#include "recherche_balise.h"
+#include <Arduino.h>
 
 //se calibre droit et retourne la position du robot par rapport au mur
 double calibration() {
-    double pos_mur;//position du robot par rapport au mur
-    double pos_mur_res; //position du robot par rapport au mur une fois calibré
+    int pos_mur;//position du robot par rapport au mur
+    int pos_mur_res; //position du robot par rapport au mur une fois calibré
+    int delta; // variation de l'ecart du robot par rapport au mur
     double previous_pos_mur;
     double delta_mur;   //delta entre l'ancienne et l'actuel ecart au mur
     float temperature = 22.0;
@@ -25,14 +26,14 @@ double calibration() {
     //======== INITIALISATION ========
     int initial_pos_left = currentMotorPosEncoder[LEFT];
     int initial_pos_right = currentMotorPosEncoder[RIGHT];
-    measureDistanceCm(temperature, &previous_pos_mur);
+    previous_pos_mur = mesure();
 
     //========= ALLER (alignement) ===========
     while(cpt_cycle < 5){
         sendVelocityCommand(motor_vel+corrige_vel[LEFT],LEFT);
         sendVelocityCommand(motor_vel+corrige_vel[RIGHT],RIGHT);
         //faire une pose pour laisser avancer
-        measureDistanceCm(temperature, &pos_mur);
+        pos_mur = mesure();
         delta = pos_mur - previous_pos_mur;
         corrige_vel[LEFT] = 0;
         corrige_vel[RIGHT] = 0;
@@ -61,7 +62,7 @@ double calibration() {
         sendVelocityCommand(-motor_vel,LEFT);
         sendVelocityCommand(-motor_vel,RIGHT);
         //faire une pose pour laisser avancer
-        measureDistanceCm(temperature, &pos_mur);
+        pos_mur = mesure();
         pos_mur_res += pos_mur/tot_cycle;   //moyenne des écarts
         cpt_cycle_tot-=1;
     }

@@ -1,17 +1,5 @@
 #include "moteur.h"
-
-#include <can-serial.h>
-#include <mcp2515_can.h>
-#include <mcp2515_can_dfs.h>
-#include <mcp_can.h>
-#if defined(SEEED_WIO_TERMINAL) && defined(CAN_2518FD)
-const int SPI_CS_PIN = BCM8;
-const int CAN_INT_PIN = BCM25;
-#else
-const int SPI_CS_PIN = 10;
-const int CAN_INT_PIN = 2;
-#endif
-
+mcp2515_can CAN(SPI_CS_PIN);  // Set CS pin
 
 /******************  GLOBAL VARIABLES *********************/
 //================== initialisation ====================

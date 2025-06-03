@@ -5,6 +5,7 @@
 #include <mcp2515_can.h>
 #include <mcp2515_can_dfs.h>
 #include <mcp_can.h>
+
 #if defined(SEEED_WIO_TERMINAL) && defined(CAN_2518FD)
 const int SPI_CS_PIN = BCM8;
 const int CAN_INT_PIN = BCM25;
@@ -14,7 +15,7 @@ const int CAN_INT_PIN = 2;
 #endif
 
 #include "mcp2515_can.h"
-mcp2515_can CAN(SPI_CS_PIN);  // Set CS pin
+extern mcp2515_can CAN;  // Set CS pin
 #define MAX_DATA_SIZE 8
 
 #if !defined(FALSE)
@@ -23,9 +24,6 @@ mcp2515_can CAN(SPI_CS_PIN);  // Set CS pin
 #endif
 #include <SPI.h>
 #include <math.h>
-
-#define MY_PI 3.14159265359
-
 
 #define MY_PI 3.14159265359
 
