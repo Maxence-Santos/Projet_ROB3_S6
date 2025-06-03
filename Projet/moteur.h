@@ -45,6 +45,10 @@ extern mcp2515_can CAN;  // Set CS pin
 #define LEFT 1
 #define RIGHT 3
 
+// Vitesse
+#define VEL_NORMAL 500
+#define VEL_LENT 100
+
 /******************  GLOBAL VARIABLES *********************/
 //=================  Declaration  =========================
 //___________Global motor state variables__________________
@@ -86,7 +90,9 @@ void motorOFF(int MOTOR_ID);
 
 void sendVelocityCommand(long int vel, int MOTOR_ID);
 
-void Velocityforward(long int vel, int MOTOR_ID);
+void Velocityforward(long int vel, int MOTOR_ID_left, int MOTOR_ID_rigth);
+
+int avance_x_mm(int distance);
 
 void readMotorState(int MOTOR_ID);
 

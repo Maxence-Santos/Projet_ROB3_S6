@@ -128,6 +128,13 @@ void Velocityforward(long int vel, int MOTOR_ID_left, int MOTOR_ID_rigth){
     sendVelocityCommand(vel,MOTOR_ID_rigth);
 }
 
+int avance_x_mm(int distance){
+  //avance le robot de distance mm si distance > 0 sinon de meme mais en reculant
+  //retourne 1 lorsque le robot est arrivé à distination
+
+  return 1;
+}
+
 
 void readMotorState(int MOTOR_ID)  {
   uint32_t id;
