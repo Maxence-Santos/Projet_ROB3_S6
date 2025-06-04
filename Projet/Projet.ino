@@ -26,7 +26,7 @@ void setup() {
   pinMode(buttonPin, INPUT);
   pinMode(ledPin, OUTPUT);
   Serial.begin(9600);
-
+  start();
   //pince
   ServoPince.attach(pinConsigne_pince);
 }
@@ -34,7 +34,6 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
   //bouton_poussoir();
-  //start();
   //calibration();      //Manu
   //int mes_prec = mesure_ref();
   //balise(mes_prec);
