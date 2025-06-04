@@ -14,11 +14,9 @@ void avance_normal() ;
 
 void avance_ralenti() ;
 
-void balise() ;
+void recule_ralenti();
 
-void stocker_pos();
-
-int mesure();
+void balise(int mes_prec);
 
 int mesure_ref();
 
