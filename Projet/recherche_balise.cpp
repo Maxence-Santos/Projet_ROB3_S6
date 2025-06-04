@@ -208,11 +208,6 @@ void balise(int mes_prec) {
           nbre_tours --;
         }
       }
-      long current_pos = currentMotorPosDeg[3];
-      while (current_pos != -currentMotorPosDeg[3] + MY_PI/2) {
-        sendVelocityCommand(-500,3);
-        sendVelocityCommand(-500,3);
-      }
     }
   }
   mes_prec = mes;
