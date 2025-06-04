@@ -8,7 +8,7 @@ Servo ServoPince;
 
 //_____________PIN I/O pince___________
 int pinFeedback_pince = A0;
-int pinConsigne_pince = 3;
+int pinConsigne_pince = 2;
 //____________________________________
 
 
