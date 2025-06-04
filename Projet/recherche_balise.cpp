@@ -250,6 +250,13 @@ void objet() { //Il faut peut-être inverser 1 et 2 pour Trigger et Echo
 }
 
 int mesure_ref() {
+  // Definition des variables  
+  int MesureMaxi = 4000; 
+  // Distance maxi a mesurer // 
+  int MesureMini = 30; 
+  // Distance mini a mesurer //  
+  long Duree; 
+  long Distance;
   int mes_prec;
   // Debut de la mesure avec un signal de 10 µS applique sur TRIG // 
   digitalWrite(Broche_Trigger_1, LOW); 
@@ -261,16 +268,16 @@ int mesure_ref() {
   // On mesure combien de temps le niveau logique haut est actif sur ECHO // 
   Duree = pulseIn(Broche_Echo_1, HIGH);  
   // Calcul de la distance grace au temps mesure // 
-  Distance_1 = 10*Duree*0.034/2;
+  Distance = 10*Duree*0.034/2;
   // Verification si valeur mesuree dans la plage // 
-  if (Distance_1 >= MesureMaxi || Distance_1 <= MesureMini) {     
+  if (Distance >= MesureMaxi || Distance <= MesureMini) {     
     Serial.println("Distance de mesure en dehors de la plage (30 mm à 3 m)"); 
   }  
   else {      
     // Affichage dans le moniteur serie de la distance mesuree //  
-    Serial.print("Distance mesuree 1 :");  
-    Serial.print(Distance_1);  
+    Serial.print("Distance mesuree :");  
+    Serial.print(Distance);  
     Serial.println("mm"); 
   }
-  return Distance_1;
+  return Distance;
 }
