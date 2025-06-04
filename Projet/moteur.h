@@ -41,8 +41,8 @@ extern mcp2515_can CAN;  // Set CS pin
 #define TRIANGLE 3
 
 // Motor ID
-#define BRAS 0
-#define LEFT 1
+#define BRAS 1
+#define LEFT 2
 #define RIGHT 3
 
 // Vitesse

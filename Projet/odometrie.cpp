@@ -1,12 +1,10 @@
 #include "tourner.h"
+#include "math.h"
+#include "moteur.h"
 
 // ========== PARAMÈTRES PHYSIQUES ==========
 const double diametre_roue=50.0; // en mm
 const double entraxe=215.0; // en mm
-const double MY_PI=3.141592653589793;
-
-const int moteur_gauche_ID=3;
-const int moteur_droit_ID=2;
 
 // ========== SENS DES ROTATIONS ==========
 const int DIR_LEFT=+1;
@@ -21,11 +19,9 @@ double orientation_rad=0.0;
 double last_left_deg=0.0;
 double last_right_deg=0.0;
 
-double currentMotorPosDeg[3]={0.0, 0.0, 0.0}; 
-
 void updateOdometry() {
-  double current_left_deg=currentMotorPosDeg[moteur_gauche_ID - 1];
-  double current_right_deg=currentMotorPosDeg[moteur_droit_ID - 1];
+  double current_left_deg=currentMotorPosDeg[LEFT - 1];
+  double current_right_deg=currentMotorPosDeg[RIGHT - 1];
 
   double delta_left_deg=current_left_deg - last_left_deg;
   double delta_right_deg=current_right_deg - last_right_deg;
