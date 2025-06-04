@@ -35,11 +35,10 @@ void loop() {
   // put your main code here, to run repeatedly:
   //bouton_poussoir();
   //start();
-  calibration();      //Manu
-  //recherche_balise(); //Maxence
-  // tourne 90        //Mathis
-  // objet            //Manu et Mathis(lever_pince())
-  // tourne_90        /Mathis
+  //calibration();      //Manu
+  //int mes_prec = mesure_ref();
+  //balise(mes_prec);
+  // objet()            //Manu et Mathis(lever_pince())
   // recherch_balise() //Maxence
   // tourne_90        /Mathis
   // recherche_balise() //Maxence
