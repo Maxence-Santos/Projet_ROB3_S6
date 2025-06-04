@@ -94,6 +94,10 @@ void Velocityforward(long int vel, int MOTOR_ID_left, int MOTOR_ID_rigth);
 
 int avance_x_mm(int distance);
 
+int avance_x_increment(int increment);
+
+int minimum(int a, int b);
+
 void readMotorState(int MOTOR_ID);
 
 #endif

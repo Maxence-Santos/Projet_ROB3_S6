@@ -1,4 +1,5 @@
 #include "moteur.h"
+#include "math.h"
 mcp2515_can CAN(SPI_CS_PIN);  // Set CS pin
 
 /******************  GLOBAL VARIABLES *********************/
@@ -125,14 +126,43 @@ void sendVelocityCommand(long int vel, int MOTOR_ID) {
 
 void Velocityforward(long int vel, int MOTOR_ID_left, int MOTOR_ID_rigth){
     sendVelocityCommand(vel,MOTOR_ID_left);
-    sendVelocityCommand(vel,MOTOR_ID_rigth);
+    sendVelocityCommand(-vel,MOTOR_ID_rigth);   //inverse la vitesse car les moteurs sont opposé
 }
 
 int avance_x_mm(int distance){
   //avance le robot de distance mm si distance > 0 sinon de meme mais en reculant
   //retourne 1 lorsque le robot est arrivé à distination
+  int inc_par_mm = 10;  // ????? à verifier
+  avance_x_increment(inc_par_mm * distance);
 
   return 1;
+}
+
+int avance_x_increment(int increment){
+  //avance le robot de distance mm si distance > 0 sinon de meme mais en reculant
+  //retourne 1 lorsque le robot est arrivé à distination
+  int vel_max = 500;
+  int vel;
+  int gain_k = 10;    // à regler experimentalemnt
+
+  int initial_increment = currentMotorPosEncoder[LEFT];
+  int delta = initial_increment+increment - currentMotorPosEncoder[LEFT];
+  while(delta > 0){
+      vel = minimum(vel_max,gain_k*delta);
+      Velocityforward(vel,LEFT,RIGHT);
+      readMotorState(LEFT);
+      readMotorState(RIGHT);
+      delta = initial_increment+increment - currentMotorPosEncoder[LEFT];
+  }
+
+  return 1;
+}
+
+int minimum(int a, int b){
+  if(a > b){
+    return b;
+  }
+  return a;
 }
 
 
