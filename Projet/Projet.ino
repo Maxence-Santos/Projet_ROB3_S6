@@ -3,6 +3,7 @@
 #include "Calibration.h"
 #include "bouton_poussoir.h"
 #include "recherche_balise.h"
+#include "tourner.h"
 
 Servo ServoPince;
 
@@ -45,4 +46,8 @@ void loop() {
   // recherche_balise() //Maxence
   // rouler(x cm)     // Maxence
   // depot_objet      // Manu
+  Velocityforward(0,LEFT,RIGHT);
+  tourner_angle(MY_PI/2);
+  Velocityforward(0,LEFT,RIGHT);
+
 }

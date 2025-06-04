@@ -32,6 +32,8 @@ double calibration() {
     while(cpt_cycle < 5){
         sendVelocityCommand(motor_vel+corrige_vel[LEFT],LEFT);
         sendVelocityCommand(motor_vel+corrige_vel[RIGHT],RIGHT);
+        readMotorState(LEFT);
+        readMotorState(RIGHT);
         //faire une pose pour laisser avancer
         pos_mur = mesure_ref();
         delta = pos_mur - previous_pos_mur;

@@ -91,8 +91,8 @@ void Velocityforward(long int vel, int MOTOR_ID_left, int MOTOR_ID_rigth){
 int avance_x_mm(int distance){
   //avance le robot de distance mm si distance > 0 sinon de meme mais en reculant
   //retourne 1 lorsque le robot est arrivé à distination
-  int inc_par_mm = 10;  // ????? à verifier
-  avance_x_increment(inc_par_mm * distance);
+  float inc_par_mm = 283;  // ????? à verifier
+  avance_x_increment((int)(inc_par_mm * distance));
 
   return 1;
 }
@@ -100,9 +100,9 @@ int avance_x_mm(int distance){
 int avance_x_increment(int increment){
   //avance le robot de distance mm si distance > 0 sinon de meme mais en reculant
   //retourne 1 lorsque le robot est arrivé à distination
-  int vel_max = 500;
+  int vel_max = 10000;
   int vel;
-  int gain_k = 10;    // à regler experimentalemnt
+  int gain_k = 30;    // à regler experimentalemnt
 
   int initial_increment = currentMotorPosEncoder[LEFT];
   int delta = initial_increment+increment - currentMotorPosEncoder[LEFT];
