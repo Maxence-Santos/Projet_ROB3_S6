@@ -21,10 +21,10 @@ void start() {
   Serial.begin(115200);
 
   // Initialization of the analog input pins
-  pinMode(analogPinP0, INPUT);
-  pinMode(analogPinP1, INPUT);
   pinMode(Broche_Trigger_1, OUTPUT); // Broche Trigger en sortie // 
-  pinMode(Broche_Echo_1, INPUT); // Broche Echo en entree // 
+  pinMode(Broche_Echo_1, INPUT); // Broche Echo en entree //
+  pinMode(Broche_Trigger_2, OUTPUT); // Broche Trigger en sortie // 
+  pinMode(Broche_Echo_2, INPUT); // Broche Echo en entree //
   
   // Initialization of the CAN communication. THis will wait until the motor is powered on
   while (CAN_OK != CAN.begin(CAN_500KBPS)) {
@@ -150,7 +150,19 @@ void recule_ralenti() {
   }
 }
 
-int mesure_balise() { //Il faut peut-être inverser 1 et 2 pour Trigger et Echo
+int mesure_ultrason(int capteur) { //Il faut peut-être inverser 1 et 2 pour Trigger et Echo
+  int trigg;
+  int echo;
+  if (capteur == MUR) {
+    trigg = Broche_Trigger_1;
+    echo = Broche_Echo_1;
+  }
+
+  else {
+    trigg = Broche_Trigger_2;
+    echo = Broche_Echo_2;
+  }
+  
   // Definition des variables  
   int MesureMaxi = 4000; 
   // Distance maxi a mesurer // 
@@ -159,14 +171,14 @@ int mesure_balise() { //Il faut peut-être inverser 1 et 2 pour Trigger et Echo
   long Duree; 
   long Distance;
   // Debut de la mesure avec un signal de 10 µS applique sur TRIG // 
-  digitalWrite(Broche_Trigger_1, LOW); 
+  digitalWrite(trigg, LOW); 
   // On efface l'etat logique de TRIG // 
   delayMicroseconds(2);   
-  digitalWrite(Broche_Trigger_1, HIGH); // On met la broche TRIG a "1" pendant 10µS //
+  digitalWrite(trigg, HIGH); // On met la broche TRIG a "1" pendant 10µS //
   delayMicroseconds(10); 
-  digitalWrite(Broche_Trigger_1, LOW); // On remet la broche TRIG a "0" //  
+  digitalWrite(trigg, LOW); // On remet la broche TRIG a "0" //  
   // On mesure combien de temps le niveau logique haut est actif sur ECHO // 
-  Duree = pulseIn(Broche_Echo_1, HIGH);  
+  Duree = pulseIn(echo, HIGH);  
   // Calcul de la distance grace au temps mesure // 
   Distance = 10*Duree*0.034/2;
   // Verification si valeur mesuree dans la plage // 
