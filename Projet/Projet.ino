@@ -27,7 +27,8 @@ void setup() {
   pinMode(ledPin, OUTPUT);
   Serial.begin(9600);
   start();
-  //pince
+
+  //=========  pince  ===========
   ServoPince.attach(pinConsigne_pince);
 }
 

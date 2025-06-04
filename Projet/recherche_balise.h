@@ -10,6 +10,9 @@
 #define Broche_Echo_2 8 // Broche Echo du HC-SR04 sur D7 // 
 #define Broche_Trigger_2 10 // Broche Trigger du HC-SR04 sur D8 //
 
+#define MUR 1
+#define OBJET 2
+
 void start() ;
 
 void avance_normal() ;
