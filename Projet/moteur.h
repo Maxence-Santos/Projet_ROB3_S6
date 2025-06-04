@@ -82,8 +82,6 @@ extern unsigned long int elapsedTimeFromePerioStartInMicros;
 extern double elapsedTime_from_period_start_in_s;
 extern long int signalPeriodInMicros; // 20 seconds
 
-int Consigne(int Mvt_type, int MOTOR_ID);
-
 void motorON(int MOTOR_ID);
 
 void motorOFF(int MOTOR_ID);

@@ -28,48 +28,6 @@ double time_at_period_start_in_s=0.0;
 long int signalPeriodInMicros = 20000000; // 20 seconds
 int printingPeriodicity = 0;
 
-
-int Consigne(int Mvt_type, int MOTOR_ID){
-  double gainPotValToVel;
-  int signalMin=450;
-  int signalMax=550;
-
-  double motorVelocityCommandInDegPerSec;
-
-
-
-  switch(Mvt_type){
-  case STILL:
-    signal = signalMin;
-    break;
-  case SQUARE:
-    if (2*elapsedTimeFromePerioStartInMicros < signalPeriodInMicros )
-      signal = signalMin;
-    else
-      signal = signalMax;
-    break;
-  case TRIANGLE:
-    if (2*elapsedTimeFromePerioStartInMicros < signalPeriodInMicros )
-      signal = signalMin+(2*((signalMax-signalMin)*elapsedTimeFromePerioStartInMicros)/(signalPeriodInMicros));
-    else
-      signal = signalMax-(2*((signalMax-signalMin)*(elapsedTimeFromePerioStartInMicros-(signalPeriodInMicros/2)))/(signalPeriodInMicros));
-    break;
-  default:
-    break;
-  }
-  gainPotValToVel = 30.0; // HERE YOU SHOULD SET THE PROPORTIONNAL GAIN
-  
-  motorVelocityCommandInDegPerSec = gainPotValToVel*(signal - currentMotorPosDeg[MOTOR_ID-1]); // HERE YOU SHOULD COMPUTE THE CONTROLLER
-
-  sendVelocityCommand((long int)(motorVelocityCommandInDegPerSec), MOTOR_ID);
-  readMotorState(MOTOR_ID);
-
-  return signal;
-
-
-}
-
-
 void motorON(int MOTOR_ID){
   unsigned char msg[MAX_DATA_SIZE] = {
     0x88,
