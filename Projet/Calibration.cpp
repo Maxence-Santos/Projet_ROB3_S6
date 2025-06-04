@@ -26,14 +26,14 @@ double calibration() {
     //======== INITIALISATION ========
     int initial_pos_left = currentMotorPosEncoder[LEFT];
     int initial_pos_right = currentMotorPosEncoder[RIGHT];
-    previous_pos_mur = mesure();
+    previous_pos_mur = mesure_ref();
 
     //========= ALLER (alignement) ===========
     while(cpt_cycle < 5){
         sendVelocityCommand(motor_vel+corrige_vel[LEFT],LEFT);
         sendVelocityCommand(motor_vel+corrige_vel[RIGHT],RIGHT);
         //faire une pose pour laisser avancer
-        pos_mur = mesure();
+        pos_mur = mesure_ref();
         delta = pos_mur - previous_pos_mur;
         corrige_vel[LEFT] = 0;
         corrige_vel[RIGHT] = 0;
@@ -62,7 +62,7 @@ double calibration() {
         sendVelocityCommand(-motor_vel,LEFT);
         sendVelocityCommand(-motor_vel,RIGHT);
         //faire une pose pour laisser avancer
-        pos_mur = mesure();
+        pos_mur = mesure_ref();
         pos_mur_res += pos_mur/tot_cycle;   //moyenne des écarts
         cpt_cycle_tot-=1;
     }
