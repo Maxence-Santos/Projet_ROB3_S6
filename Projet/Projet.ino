@@ -2,6 +2,7 @@
 #include <Servo.h>
 #include "Calibration.h"
 #include "bouton_poussoir.h"
+#include "recherche_balise.h"
 
 Servo ServoPince;
 

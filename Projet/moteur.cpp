@@ -26,6 +26,7 @@ int typeOfMovement = TRIANGLE;
 double time_at_period_start_in_s=0.0;
 
 long int signalPeriodInMicros = 20000000; // 20 seconds
+int printingPeriodicity = 0;
 
 
 int Consigne(int Mvt_type, int MOTOR_ID){

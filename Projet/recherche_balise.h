@@ -23,6 +23,8 @@ void recule_ralenti();
 
 void balise(int mes_prec);
 
+int mesure_ultrason(int capteur);
+
 int mesure_ref();
 
 #endif

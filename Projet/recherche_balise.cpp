@@ -198,7 +198,7 @@ void balise(int mes_prec) {
   float pos_md;
   float pos_mg;
   float nbre_tours;
-  int mes = mesure_balise();
+  int mes = mesure_ultrason(MUR);
   bool flag = 0;
   avance_normal();
 
