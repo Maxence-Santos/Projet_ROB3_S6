@@ -10,15 +10,15 @@ void bouger_bras(int valeur){
 
 }
 
-void objet(){
-    int distance = mesure();    //distance en mm par rapport à l'objet
+void objet_bis(){
+    int distance = mesure_ref();    //distance en mm par rapport à l'objet
     while( distance > 50 ){     //avancé tant qu'on est à plus de 50mm
         Velocityforward(VEL_NORMAL,LEFT,RIGHT);
     }
     
     Velocityforward(0,LEFT,RIGHT);  //stoper le robot
 
-    while( mesure() > distance+5){  //lever le bras tant que le capteur n'est pas detecter la zone de prise
+    while( mesure_ref() > distance+5){  //lever le bras tant que le capteur n'est pas detecter la zone de prise
         bouger_bras(5);
     }
 
