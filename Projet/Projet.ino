@@ -18,33 +18,32 @@ int pinConsigne_pince = 2;
 
 
 //____________PIN BOUTON______________
-const int buttonPin = 2;  
+const int buttonPin = 3;  
 const int ledPin = 13;    
 
-int buttonPushCounter = 0;  
-int buttonState = 0;        
-int lastButtonState = 0;  
 //____________________________________
 
 
 
 void setup() {
+  // initialiser_bouton();
   pinMode(buttonPin, INPUT);
   pinMode(ledPin, OUTPUT);
-  Serial.begin(9600);
-  start();
+  Serial.begin(115200);
+   do {
+    bouton();
+  }while(buttonPushCounter%2 == 0);
 
-  // initialiser_bouton();
-  // attendre_depart();  // Attend appui sur bouton et affiche "S"
-
+  start();  
+  Serial.write("S");
   //=========  pince  ===========
   ServoPince.attach(pinConsigne_pince);
-  ouverture_pince(9);    //ouvre la pince
+  ouverture_pince(32);    //ouvre la pince
 
   Velocityforward(0,LEFT,RIGHT);
 
   //==== bras ==========
-  sendVelocityCommand(-5000,BRAS);
+  sendVelocityCommand(0,BRAS);
   delay(700);
   sendVelocityCommand(0,BRAS);
 }
@@ -52,7 +51,8 @@ void setup() {
 void loop() {
   
   //============ BOUTON ============================
-  // if (!est_en_marche()) return;
+  
+  
   //================================================
 
   //============ code test rotation ================
@@ -61,10 +61,10 @@ void loop() {
   //================================================
 
   //=========== code test avancer/reculer ==========
-  delay(5000);
-  avance_x_increment(20000,1);    // 10000 = 2.5cm
-  delay(5000);
-  avance_x_increment(20000,-1);    // 10000 = 2.5cm
+  // delay(5000);
+  // avance_x_increment(20000,1);    // 10000 = 2.5cm
+  // delay(5000);
+  // avance_x_increment(20000,-1);    // 10000 = 2.5cm
   //================================================
 
   //=========== Recherche de balise ================
@@ -87,67 +87,72 @@ void loop() {
 
 
   //__________1ere Ligne___________________________
-  // delay(4000);
-  // Serial.println("je cherche la balise");
-  // balise();
-  // delay(2000);
-  // //avance_x_mm(50,-1);
-  // delay(2000);
-  // tourner_experimentalement(7500,-1);
-  // Serial.println("fin de la 1ere etape");
+  delay(4000);
+  Serial.println("je cherche la balise");
+  balise();
+  delay(2000);
+  avance_x_mm(60,-1);
+  delay(2000);
+  tourner_experimentalement(7430,-1);
+  Serial.println("fin de la 1ere etape");
   //__________2eme Ligne___________________________
-  // Serial.println("je cherche l'objet");
-  // delay(2000);
-  // objet();    //cherche l'objet puis se stop
-  // delay(1000);
-  // avance_x_mm(40,1);  //avance le robot vers l'objet
-  // delay(1000);
-  // ouverture_pince(9);     //prend l'objet
-  // delay(2000);
-  // sendVelocityCommand(-5000,BRAS);  //leve le bras
-  // delay(2000);
+  Serial.println("je cherche l'objet");
+  delay(2000);
+  objet();    //cherche l'objet puis se stop
+  delay(1000);
+  position_zone();    //se cale devant la zone de prise
+  //avance experimentalement========
+  Velocityforward(5000,LEFT,RIGHT);
+  delay(2500);
+  Velocityforward(0,LEFT,RIGHT);
+  // //================================  delay(1000);
+  ouverture_pince(9);     //prend l'objet
+  delay(2000);
+  sendVelocityCommand(-50000,BRAS);  //leve le bras
+  readMotorState(BRAS);
+  delay(2000);
   // sendVelocityCommand(0,BRAS);
-  // Serial.println("objet attrappé et lever");
-  // delay(5000);
-  // tourner_experimentalement(7500,-1);
-  // Serial.println("fin de la 2eme etape");
+  Serial.println("objet attrappé et lever");
+  delay(5000);
+  tourner_experimentalement(7430,-1);
+  Serial.println("fin de la 2eme etape");
   //__________3eme Ligne___________________________
-  // delay(2000);
-  // Serial.println("je cherche la balise");
-  // balise();
-  // delay(2000);
-  // // avance_x_mm(50,1);
-  // delay(2000);
-  // tourner_experimentalement(7500,-1);
-  // Serial.println("fin de la 3eme etape");
+  delay(2000);
+  Serial.println("je cherche la balise");
+  balise();
+  delay(2000);
+  // avance_x_mm(50,1);
+  delay(2000);
+  tourner_experimentalement(7430,-1);
+  Serial.println("fin de la 3eme etape");
   //__________4eme Ligne___________________________
-  // Serial.println("Je cherche la zone de depot");
-  // balise();
-  // Serial.println("zone de depot trouvé");
-  // delay(1000);
-  // //recule experimentalement========
-  // Velocityforward(-5000,LEFT,RIGHT);
-  // delay(10000);
-  // Velocityforward(0,LEFT,RIGHT);
-  // //================================
-  // delay(1000);
-  // sendVelocityCommand(5000,BRAS);  //baisse le bras
-  // delay(2000);
-  // sendVelocityCommand(0,BRAS);
-  // delay(500);
-  // ouverture_pince(32);     //lache l'objet
-  // Serial.println("fin de la 4eme etape");
-  // delay(2000);
+  Serial.println("Je cherche la zone de depot");
+  balise();
+  Serial.println("zone de depot trouvé");
+  delay(1000);
+  //recule experimentalement========
+  Velocityforward(-5000,LEFT,RIGHT);
+  delay(10000);
+  Velocityforward(0,LEFT,RIGHT);
+  //================================
+  delay(1000);
+  sendVelocityCommand(5000,BRAS);  //baisse le bras
+  delay(2000);
+  sendVelocityCommand(0,BRAS);
+  delay(500);
+  ouverture_pince(32);     //lache l'objet
+  Serial.println("fin de la 4eme etape");
+  delay(2000);
 
 
   // _______________fin___________________________
   //recule + figure ========
-  // Velocityforward(-5000,LEFT,RIGHT);
-  // delay(10000);
+  Velocityforward(-5000,LEFT,RIGHT);
+  delay(10000);
   // sendVelocityCommand(30000,RIGHT);
   // sendVelocityCommand(30000,LEFT);
   // delay(5000);
-  // Velocityforward(0,LEFT,RIGHT);
+  Velocityforward(0,LEFT,RIGHT);
   //==========
   delay(5000);
 }

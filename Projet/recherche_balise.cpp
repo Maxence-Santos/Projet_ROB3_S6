@@ -4,6 +4,7 @@
 #include "math.h"
 #include <Arduino.h>
 #include "Calibration.h"
+#include "bouton_poussoir.h"
 
 // Definition des variables  
 int MesureMaxi = 4000; 
@@ -51,7 +52,14 @@ void start() {
 
   // Send motot off then motor on commande to reset
   
-  //motorOFF(1);
+  
+  motorOFF(1);
+  delay(500);
+  readMotorState(1);
+
+  motorOFF(2);
+  delay(500);
+  readMotorState(2);
   motorOFF(3);
   delay(500);
   readMotorState(3);
@@ -60,12 +68,12 @@ void start() {
   Serial.println(" Turn the rotor in its ZERO position they type 'S'");
   Serial.println("***********************************************************************");
   nothingReceived = TRUE;
-  while (nothingReceived==TRUE){
+  /*while (nothingReceived==TRUE){
     serialReceivedChar = Serial.read();
     if(serialReceivedChar == 'S') {
       nothingReceived = FALSE;
     }
-  }
+  }*/
 
   //motorON(1);
   for (int i = 1;i<= 3; i++){
@@ -203,7 +211,7 @@ void balise() {
   delay(1000);
   
   int delta = fabs(dist_ref - mesure_ultrason(MUR));
-  int taille_balise = 100;
+  int taille_balise = 60;
   int nb_confirmation = 5;
 
   while( delta < taille_balise){
