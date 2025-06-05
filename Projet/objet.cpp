@@ -1,7 +1,8 @@
 #include "objet.h"
-#include "Servo.h"
+#include <Servo.h>
 #include "moteur.h"
 #include "recherche_balise.h"
+#include "pince.h"
 
 
 void bouger_bras(int valeur){
@@ -10,26 +11,26 @@ void bouger_bras(int valeur){
 
 }
 
-void objet_bis(){
-    int distance = mesure_ref();    //distance en mm par rapport à l'objet
-    while( distance > 50 ){     //avancé tant qu'on est à plus de 50mm
-        Velocityforward(VEL_NORMAL,LEFT,RIGHT);
+void objet(){
+    //cherche l'objet puis s'arrete à 50mm
+    int distance = mesure_ultrason(OBJET);    //distance en mm par rapport à l'objet
+    Velocityforward(5000,LEFT,RIGHT);
+    int confirmation = 0;
+    while( confirmation < 10){     //avancé tant qu'on est à plus de 50mm
+        distance = mesure_ultrason(OBJET); 
+        if(distance < 50){
+            confirmation++;
+        }else{
+            confirmation = 0;
+        }
     }
     
     Velocityforward(0,LEFT,RIGHT);  //stoper le robot
-
-    while( mesure_ref() > distance+5){  //lever le bras tant que le capteur n'est pas detecter la zone de prise
-        bouger_bras(5);
-    }
-
-    bouger_bras(15);    //leve le bras pour aligner la pince avec la zone de prise
-    avance_x_mm(distance);  //avance le robot sur la zone
-    ouverture_pince(0);     //prend l'objet
-    bouger_bras(10);        //souleve l'objet de 10mm
+    delay(1000);
 }
 
 
 void depot_objet(){
     bouger_bras(-10);        //descent le bras de 1cm
-    ouverture_pince(32);    //ouvre le pince
+    //ouverture_pince(32);    //ouvre le pince
 }

@@ -90,9 +90,9 @@ void sendVelocityCommand(long int vel, int MOTOR_ID);
 
 void Velocityforward(long int vel, int MOTOR_ID_left, int MOTOR_ID_rigth);
 
-int avance_x_mm(int distance);
+int avance_x_mm(int distance,int sens);
 
-int avance_x_increment(int increment);
+int avance_x_increment(int increment,int sens);
 
 int minimum(int a, int b);
 

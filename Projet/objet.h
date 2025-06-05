@@ -1,7 +1,7 @@
 #ifndef OBJET_H
 #define OBJET_H
 
-void objet_bis();
+void objet();
 
 void bouger_bras(int valeur);
 

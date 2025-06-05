@@ -1,6 +1,9 @@
 #include "recherche_balise.h"
 #include "HCSR04.h"
 #include "moteur.h"
+#include "math.h"
+#include <Arduino.h>
+#include "Calibration.h"
 
 // Definition des variables  
 int MesureMaxi = 4000; 
@@ -62,13 +65,10 @@ void start() {
     if(serialReceivedChar == 'S') {
       nothingReceived = FALSE;
     }
-
-    sendVelocityCommand(-150000,1);
-    delay(1000);
   }
 
   //motorON(1);
-  for (int i = 3;i<= 3; i++){
+  for (int i = 1;i<= 3; i++){
   motorON(i);
   readMotorState(i);
   delay(500);
@@ -182,79 +182,82 @@ int mesure_ultrason(int capteur) { //Il faut peut-être inverser 1 et 2 pour Tri
   // Calcul de la distance grace au temps mesure // 
   Distance = 10*Duree*0.034/2;
   // Verification si valeur mesuree dans la plage // 
-  if (Distance >= MesureMaxi || Distance <= MesureMini) {     
-    Serial.println("Distance de mesure en dehors de la plage (30 mm à 3 m)"); 
-  }  
-  else {      
-    // Affichage dans le moniteur serie de la distance mesuree //  
-    Serial.print("Distance mesuree :");  
-    Serial.print(Distance);  
-    Serial.println("mm"); 
-  }
+  // if (Distance >= MesureMaxi || Distance <= MesureMini) {     
+  //   Serial.println("Distance de mesure en dehors de la plage (30 mm à 3 m)"); 
+  // }  
+  // else {      
+  //   // Affichage dans le moniteur serie de la distance mesuree //  
+  //   Serial.print("Distance mesuree :");  
+  //   Serial.print(Distance);  
+  //   Serial.println("mm"); 
+  // }
+  Serial.print("Distance mesuree :");  
+  Serial.print(Distance);  
+  Serial.println("mm"); 
   return Distance;
 }
 
-void balise(int mes_prec) {
-  float pos_md;
-  float pos_mg;
-  float nbre_tours;
-  int mes = mesure_ultrason(MUR);
-  bool flag = 0;
-  avance_normal();
+void balise() {
+  int dist_ref = calibre_distance_ref();
+  Velocityforward(5000,LEFT,RIGHT);
+  delay(1000);
+  
+  int delta = fabs(dist_ref - mesure_ultrason(MUR));
+  int taille_balise = 100;
+  int nb_confirmation = 5;
 
-  if ((mes_prec - mes >= 15) || (mes_prec - mes <= 20)) {
-    avance_ralenti();
-    if ((mes_prec - mes >= 29) || (mes_prec - mes <= 31)) {
-      if (!flag) { // Stockage des positions
-        pos_md = currentMotorPosDeg[3]; // ou 2
-        pos_mg = currentMotorPosDeg[2]; // ou 3
-        nbre_tours = currentNumOfMotorRevol[3];
-        flag = 1;
-      }
-    }
-    if ((mes_prec - mes >= 25) || (mes_prec - mes <=29)) {
-      nbre_tours = currentNumOfMotorRevol[3] - nbre_tours;
-      while (currentMotorPosDeg[3] != pos_md && currentMotorPosDeg[2] != pos_mg && nbre_tours/2 != 0) { //Il faut peut-être inverser 2 et 3
-        recule_ralenti();
-        if (currentMotorPosDeg[3] == 2*MY_PI) { //peut-être -2*pi
-          nbre_tours --;
-        }
+  while( delta < taille_balise){
+    int val = mesure_ultrason(MUR);
+    Serial.print("distance mur = ");
+    Serial.print(val);
+    Serial.print(" ref = ");
+    Serial.println(dist_ref);
+    delta = fabs(dist_ref - val);
+    for(int i=0; i<nb_confirmation; i++){
+      val = mesure_ultrason(MUR);
+      delta = fabs(dist_ref - val);
+      Serial.print("confirmation : distance mur = ");
+      Serial.print(val);
+      Serial.print(" ref = ");
+      Serial.println(dist_ref);
+      if(delta < taille_balise){
+        break;
       }
     }
   }
-  mes_prec = mes;
+  Velocityforward(0,LEFT,RIGHT);
 }
 
-void objet() { //Il faut peut-être inverser 1 et 2 pour Trigger et Echo
-  // Definition des variables  
-  int MesureMaxi = 4000; 
-  // Distance maxi a mesurer // 
-  int MesureMini = 30; 
-  // Distance mini a mesurer //  
-  long Duree; 
-  long Distance;
-  long dist_obj_min = 200; //A CHANGER EN FONCTION
+// void objet() { //Il faut peut-être inverser 1 et 2 pour Trigger et Echo
+//   // Definition des variables  
+//   int MesureMaxi = 4000; 
+//   // Distance maxi a mesurer // 
+//   int MesureMini = 30; 
+//   // Distance mini a mesurer //  
+//   long Duree; 
+//   long Distance;
+//   long dist_obj_min = 200; //A CHANGER EN FONCTION
 
-  // Debut de la mesure avec un signal de 10 µS applique sur TRIG // 
-  digitalWrite(Broche_Trigger_2, LOW); 
-  // On efface l'etat logique de TRIG // 
-  delayMicroseconds(2);   
-  digitalWrite(Broche_Trigger_2, HIGH); // On met la broche TRIG a "1" pendant 10µS //
-  delayMicroseconds(10); 
-  digitalWrite(Broche_Trigger_2, LOW); // On remet la broche TRIG a "0" //  
-  // On mesure combien de temps le niveau logique haut est actif sur ECHO // 
-  Duree = pulseIn(Broche_Echo_2, HIGH);  
-  // Calcul de la distance grace au temps mesure // 
-  Distance = 10*Duree*0.034/2;
-  // Verification si valeur mesuree dans la plage // 
-  if (Distance > dist_obj_min) {     
-    avance_ralenti();
-  }  
-  else {      
-    sendVelocityCommand(0,3);
-    sendVelocityCommand(0,2);
-  }
-}
+//   // Debut de la mesure avec un signal de 10 µS applique sur TRIG // 
+//   digitalWrite(Broche_Trigger_2, LOW); 
+//   // On efface l'etat logique de TRIG // 
+//   delayMicroseconds(2);   
+//   digitalWrite(Broche_Trigger_2, HIGH); // On met la broche TRIG a "1" pendant 10µS //
+//   delayMicroseconds(10); 
+//   digitalWrite(Broche_Trigger_2, LOW); // On remet la broche TRIG a "0" //  
+//   // On mesure combien de temps le niveau logique haut est actif sur ECHO // 
+//   Duree = pulseIn(Broche_Echo_2, HIGH);  
+//   // Calcul de la distance grace au temps mesure // 
+//   Distance = 10*Duree*0.034/2;
+//   // Verification si valeur mesuree dans la plage // 
+//   if (Distance > dist_obj_min) {     
+//     avance_ralenti();
+//   }  
+//   else {      
+//     sendVelocityCommand(0,3);
+//     sendVelocityCommand(0,2);
+//   }
+// }
 
 int mesure_ref() {
   // Definition des variables  

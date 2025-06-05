@@ -103,8 +103,5 @@ private:
    int8_t max;                       // maximum is this value times 4 added to MAX_PULSE_WIDTH
 };
 
-void ouverture_pince(int ouv_mm);
-int read_pos();
-
 #endif
 #endif

@@ -1,5 +1,6 @@
 #include "moteur.h"
 #include "math.h"
+#include <Arduino.h>
 mcp2515_can CAN(SPI_CS_PIN);  // Set CS pin
 
 /******************  GLOBAL VARIABLES *********************/
@@ -86,34 +87,42 @@ void sendVelocityCommand(long int vel, int MOTOR_ID) {
 void Velocityforward(long int vel, int MOTOR_ID_left, int MOTOR_ID_rigth){
     sendVelocityCommand(vel,MOTOR_ID_left);
     sendVelocityCommand(-vel,MOTOR_ID_rigth);   //inverse la vitesse car les moteurs sont opposé
+    readMotorState(LEFT);
+    readMotorState(RIGHT);
 }
 
-int avance_x_mm(int distance){
+int avance_x_mm(int distance, int sens){
   //avance le robot de distance mm si distance > 0 sinon de meme mais en reculant
   //retourne 1 lorsque le robot est arrivé à distination
-  float inc_par_mm = 283;  // ????? à verifier
-  avance_x_increment((int)(inc_par_mm * distance));
+  // sens 1 avance et -1 reculer
+  int inc_par_mm = 400;  // ????? à verifier
+  avance_x_increment(inc_par_mm * distance,sens);
 
   return 1;
 }
 
-int avance_x_increment(int increment){
+int avance_x_increment(int increment, int sens){
   //avance le robot de distance mm si distance > 0 sinon de meme mais en reculant
   //retourne 1 lorsque le robot est arrivé à distination
+  Serial.println("entre dans avance_x_increment");
   int vel_max = 10000;
   int vel;
   int gain_k = 30;    // à regler experimentalemnt
 
-  int initial_increment = currentMotorPosEncoder[LEFT];
-  int delta = initial_increment+increment - currentMotorPosEncoder[LEFT];
+  int initial_increment = currentMotorPosEncoder[LEFT-1];
+  Serial.println(initial_increment);
+  int delta = sens*(initial_increment+increment*sens - currentMotorPosEncoder[LEFT-1]);
   while(delta > 0){
-      vel = minimum(vel_max,gain_k*delta);
-      Velocityforward(vel,LEFT,RIGHT);
-      readMotorState(LEFT);
-      readMotorState(RIGHT);
-      delta = initial_increment+increment - currentMotorPosEncoder[LEFT];
+      //Serial.println(delta);
+      //vel = minimum(vel_max,(gain_k*delta));
+      vel = 5000;
+      Velocityforward(vel*sens,LEFT,RIGHT);
+      //delay(10);
+      delta = sens*(initial_increment+increment*sens - currentMotorPosEncoder[LEFT-1]);
   }
-
+  Velocityforward(0,LEFT,RIGHT);
+  Serial.println(currentMotorPosEncoder[LEFT-1]);
+  Serial.println("sort de avance_x_increment");
   return 1;
 }
 
