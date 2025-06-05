@@ -6,6 +6,7 @@
 #include "tourner.h"
 #include "pince.h"
 #include "objet.h"
+#include "bouton_poussoir.h"
 
 
 Servo ServoPince;
@@ -31,12 +32,14 @@ void setup() {
   pinMode(buttonPin, INPUT);
   pinMode(ledPin, OUTPUT);
   Serial.begin(9600);
-
   start();
+
+  // initialiser_bouton();
+  // attendre_depart();  // Attend appui sur bouton et affiche "S"
 
   //=========  pince  ===========
   ServoPince.attach(pinConsigne_pince);
-  ouverture_pince(32);    //ouvre la pince
+  ouverture_pince(9);    //ouvre la pince
 
   Velocityforward(0,LEFT,RIGHT);
 
@@ -47,16 +50,21 @@ void setup() {
 }
 
 void loop() {
+  
+  //============ BOUTON ============================
+  // if (!est_en_marche()) return;
+  //================================================
+
   //============ code test rotation ================
   // delay(5000);
   // tourner_experimentalement(7500*2,-1);    //7500 = 90°
   //================================================
 
   //=========== code test avancer/reculer ==========
-  // delay(5000);
-  // avance_x_increment(20000,1);    // 10000 = 2.5cm
-  // delay(5000);
-  // avance_x_increment(20000,-1);    // 10000 = 2.5cm
+  delay(5000);
+  avance_x_increment(20000,1);    // 10000 = 2.5cm
+  delay(5000);
+  avance_x_increment(20000,-1);    // 10000 = 2.5cm
   //================================================
 
   //=========== Recherche de balise ================
@@ -83,52 +91,65 @@ void loop() {
   // Serial.println("je cherche la balise");
   // balise();
   // delay(2000);
-  // avance_x_mm(50,1);
+  // //avance_x_mm(50,-1);
   // delay(2000);
   // tourner_experimentalement(7500,-1);
   // Serial.println("fin de la 1ere etape");
   //__________2eme Ligne___________________________
-  Serial.println("je cherche l'objet");
-  delay(2000);
-  objet();    //cherche l'objet puis se stop
-  delay(2000);
-  avance_x_mm(30,1);  //avance le robot l'objet
-  delay(2000);
-  ouverture_pince(8);     //prend l'objet
-  delay(5000);
-  sendVelocityCommand(-5000,BRAS);  //leve le bras
-  delay(2000);
-  sendVelocityCommand(0,BRAS);
-  Serial.println("objet attrappé et lever");
-  delay(5000);
+  // Serial.println("je cherche l'objet");
+  // delay(2000);
+  // objet();    //cherche l'objet puis se stop
+  // delay(1000);
+  // avance_x_mm(40,1);  //avance le robot vers l'objet
+  // delay(1000);
+  // ouverture_pince(9);     //prend l'objet
+  // delay(2000);
+  // sendVelocityCommand(-5000,BRAS);  //leve le bras
+  // delay(2000);
+  // sendVelocityCommand(0,BRAS);
+  // Serial.println("objet attrappé et lever");
+  // delay(5000);
+  // tourner_experimentalement(7500,-1);
+  // Serial.println("fin de la 2eme etape");
   //__________3eme Ligne___________________________
-  // à nouveau le truc des balises
+  // delay(2000);
+  // Serial.println("je cherche la balise");
+  // balise();
+  // delay(2000);
+  // // avance_x_mm(50,1);
+  // delay(2000);
+  // tourner_experimentalement(7500,-1);
+  // Serial.println("fin de la 3eme etape");
   //__________4eme Ligne___________________________
-  Serial.println("Je cherche la zone de depot");
-  balise();
-  Serial.println("zone de depot trouvé");
-  delay(2000);
-  //recule experimentalement========
-  Velocityforward(-5000,LEFT,RIGHT);
-  delay(10000);
-  Velocityforward(0,LEFT,RIGHT);
-  //==========
-  delay(2000);
-  sendVelocityCommand(5000,BRAS);  //baisse le bras
-  delay(2000);
-  sendVelocityCommand(0,BRAS);
-  ouverture_pince(32);     //lache l'objet
-  delay(2000);
-  // fin
+  // Serial.println("Je cherche la zone de depot");
+  // balise();
+  // Serial.println("zone de depot trouvé");
+  // delay(1000);
+  // //recule experimentalement========
+  // Velocityforward(-5000,LEFT,RIGHT);
+  // delay(10000);
+  // Velocityforward(0,LEFT,RIGHT);
+  // //================================
+  // delay(1000);
+  // sendVelocityCommand(5000,BRAS);  //baisse le bras
+  // delay(2000);
+  // sendVelocityCommand(0,BRAS);
+  // delay(500);
+  // ouverture_pince(32);     //lache l'objet
+  // Serial.println("fin de la 4eme etape");
+  // delay(2000);
+
+
+  // _______________fin___________________________
   //recule + figure ========
-  Velocityforward(-5000,LEFT,RIGHT);
-  delay(10000);
-  sendVelocityCommand(30000,RIGHT);
-  sendVelocityCommand(30000,LEFT);
-  delay(5000);
-  Velocityforward(0,LEFT,RIGHT);
+  // Velocityforward(-5000,LEFT,RIGHT);
+  // delay(10000);
+  // sendVelocityCommand(30000,RIGHT);
+  // sendVelocityCommand(30000,LEFT);
+  // delay(5000);
+  // Velocityforward(0,LEFT,RIGHT);
   //==========
-  delay(100000);
+  delay(5000);
 }
 
 

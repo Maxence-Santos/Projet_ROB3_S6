@@ -18,7 +18,7 @@ void objet(){
     int confirmation = 0;
     while( confirmation < 10){     //avancé tant qu'on est à plus de 50mm
         distance = mesure_ultrason(OBJET); 
-        if(distance < 50){
+        if(distance < 60){
             confirmation++;
         }else{
             confirmation = 0;
@@ -29,6 +29,9 @@ void objet(){
     delay(1000);
 }
 
+void position_zone(){
+
+}
 
 void depot_objet(){
     bouger_bras(-10);        //descent le bras de 1cm
